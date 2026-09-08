@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#173A2D" />
+  <title>Meu Ano Bíblico</title>
+
+  <style>
+    :root {
+      --bg: #f3f6f3;
+      --surface: rgba(255, 255, 255, 0.92);
+      --surface-strong: #ffffff;
+      --text: #18201c;
+      --muted: #6c7771;
+      --line: #dfe7e2;
+      --primary: #173a2d;
+      --primary-2: #285c48;
+      --primary-soft: #e5eee9;
+      --accent: #cda75e;
+      --success: #2d7b57;
+      --shadow: 0 14px 40px rgba(20, 50, 38, 0.09);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(205, 167, 94, 0.12), transparent 28rem),
+        linear-gradient(180deg, #eef4f0 0%, var(--bg) 42%, #f7f8f7 100%);
+    }
+
+    button, select, input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app-shell {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      padding: 18px 14px 110px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      border-radius: 28px;
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.06), transparent 45%),
+        var(--primary);
+      box-shadow: 0 20px 50px rgba(23, 58, 45, .18);
+    }
+
+    .hero::after {
+      content: "✦";
+      position: absolute;
+      right: -6px;
+      top: -42px;
+      font-size: 150px;
+      color: rgba(255,255,255,.045);
+      transform: rotate(10deg);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+      color: rgba(255,255,255,.75);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(27px, 7vw, 38px);
+      line-height: 1.03;
+      letter-spacing: -.035em;
+    }
+
+    .hero-subtitle {
+      margin: 10px 0 0;
+      max-width: 560px;
+      color: rgba(255,255,255,.76);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat small {
+      display: block;
+      margin-bottom: 4px;
+      color: rgba(255,255,255,.64);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    .stat strong {
+      font-size: 20px;
+      letter-spacing: -.02em;
+    }
+
+    .card {
+      margin-top: 14px;
+      padding: 18px;
+      border: 1px solid rgba(23, 58, 45, .075);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .book-select-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    select {
+      width: 100%;
+      min-height: 50px;
+      padding: 0 42px 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      color: var(--text);
+      background: var(--surface-strong);
+      outline: none;
+      font-weight: 750;
+    }
+
+    select:focus {
+      border-color: var(--primary-2);
+      box-shadow: 0 0 0 4px rgba(40, 92, 72, .11);
+    }
+
+    .icon-btn {
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 15px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 19px;
+      transition: .2s ease;
+    }
+
+    .icon-btn:active {
+      transform: scale(.96);
+    }
+
+    .book-title-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .book-title-row h2 {
+      margin: 0;
+      font-size: 25px;
+      letter-spacing: -.03em;
+    }
+
+    .book-title-row span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .progress-track {
+      height: 10px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e5ebe7;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary-2), var(--success));
+      transition: width .35s ease;
+    }
+
+    .next-reading {
+      display: none;
+      width: 100%;
+      margin-top: 14px;
+      padding: 15px 17px;
+      border: 0;
+      border-radius: 16px;
+      color: white;
+      background: var(--primary);
+      font-weight: 800;
+      text-align: left;
+      box-shadow: 0 10px 28px rgba(23, 58, 45, .14);
+    }
+
+    .next-reading span {
+      display: block;
+      margin-top: 2px;
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 20px 2px 10px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: -.01em;
+    }
+
+    .section-head small {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .chapter {
+      position: relative;
+      min-height: 68px;
+      padding: 10px 7px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface-strong);
+      color: var(--text);
+      font-weight: 850;
+      transition: transform .16s ease, opacity .2s ease, background .2s ease, border-color .2s ease;
+      user-select: none;
+    }
+
+    .chapter:active {
+      transform: scale(.96);
+    }
+
+    .chapter-number {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .chapter-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .chapter.pending:hover {
+      border-color: #b7c9bf;
+    }
+
+    .chapter.done {
+      opacity: .48;
+      background: #edf1ee;
+      text-decoration: line-through;
+      border-style: dashed;
+    }
+
+    .chapter.done::after {
+      content: "✓";
+      position: absolute;
+      top: 7px;
+      right: 8px;
+      color: var(--success);
+      font-size: 11px;
+      font-weight: 950;
+    }
+
+    .chapter.syncing {
+      opacity: .35;
+      pointer-events: none;
+    }
+
+    .completed-box {
+      margin-top: 18px;
+      padding-top: 4px;
+      border-top: 1px dashed #d9e1dc;
+    }
+
+    .completed-box summary {
+      padding: 12px 2px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      list-style: none;
+    }
+
+    .completed-box summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .completed-box summary::before {
+      content: "▸";
+      display: inline-block;
+      margin-right: 7px;
+      transition: transform .18s ease;
+    }
+
+    .completed-box[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .empty-state {
+      padding: 26px 14px;
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .books-overview {
+      display: grid;
+      gap: 9px;
+      max-height: 430px;
+      overflow: auto;
+      padding-right: 3px;
+    }
+
+    .book-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 13px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .book-row strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .book-row small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+    }
+
+    .book-percent {
+      min-width: 48px;
+      padding: 7px 8px;
+      border-radius: 10px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 850;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .status {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      z-index: 20;
+      max-width: calc(100vw - 28px);
+      padding: 10px 14px;
+      border-radius: 999px;
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      color: #fff;
+      background: #1f2e27;
+      box-shadow: 0 12px 32px rgba(0,0,0,.17);
+      transition: .25s ease;
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .status.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .status.error {
+      background: #8d3030;
+    }
+
+    .loader {
+      display: grid;
+      place-items: center;
+      min-height: 220px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .spinner {
+      width: 28px;
+      height: 28px;
+      margin-bottom: 10px;
+      border: 3px solid #dce5df;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (min-width: 540px) {
+      .app-shell {
+        padding: 26px 20px 110px;
+      }
+
+      .chapter-grid {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+      }
+
+      .hero {
+        padding: 30px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app-shell">
+    <section class="hero">
+      <div class="eyebrow">✦ Leitura pessoal</div>
+      <h1 id="appTitle">Meu Ano Bíblico</h1>
+      <p class="hero-subtitle">
+        Seu marcador digital para acompanhar a leitura da Bíblia no seu próprio ritmo.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <small>Progresso geral</small>
+          <strong id="overallPercent">0%</strong>
+        </div>
+        <div class="stat">
+          <small>Capítulos lidos</small>
+          <strong id="overallRead">0 / 1189</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <label class="label" for="bookSelect">Livro atual</label>
+
+      <div class="book-select-wrap">
+        <select id="bookSelect" aria-label="Selecionar livro bíblico">
+          <option>Carregando...</option>
+        </select>
+        <button class="icon-btn" id="refreshBtn" aria-label="Atualizar" title="Atualizar">↻</button>
+      </div>
+
+      <div class="book-title-row">
+        <h2 id="bookTitle">—</h2>
+        <span id="bookCount">0 de 0</span>
+      </div>
+
+      <div class="progress-track" aria-label="Progresso do livro">
+        <div class="progress-fill" id="bookProgressBar"></div>
+      </div>
+
+      <button class="next-reading" id="nextReadingBtn">
+        Próxima leitura: <b id="nextReadingText"></b>
+        <span>Toque para localizar o próximo capítulo pendente.</span>
+      </button>
+    </section>
+
+    <section class="card" id="chaptersCard">
+      <div id="chaptersContent">
+        <div class="loader">
+          <div>
+            <div class="spinner"></div>
+            Carregando sua leitura...
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <details>
+        <summary style="cursor:pointer;font-weight:850;">Visão geral dos 66 livros</summary>
+        <div style="height:12px"></div>
+        <div class="books-overview" id="booksOverview"></div>
+      </details>
+    </section>
+  </main>
+
+  <div class="status" id="statusToast"></div>
+
+  <script>
+    // ============================================================
+    // LIGAÇÃO ENTRE O HTML E O APPS SCRIPT
+    // ============================================================
+    // DEPOIS DE PUBLICAR O APPS SCRIPT COMO "APLICATIVO DA WEB",
+    // COPIE A URL QUE TERMINA EM /exec E COLE ENTRE AS ASPAS ABAIXO.
+    //
+    // EXEMPLO:
+    // const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/ABC123.../exec';
+    //
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_ifqzJnxy5pjec9KBoJq5h5P_s2NMKNKrCbMWRxxVybLJNlN0IN0Zar5vMihYXP30pQ/exec';
+    //                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    //                         É AQUI QUE VOCÊ COLA O LINK
+    // ============================================================
+
+    const state = {
+      currentBook: '',
+      chapters: [],
+      books: [],
+      bookProgress: { read: 0, total: 0, percent: 0 },
+      overall: { read: 0, total: 1189, percent: 0 },
+      busy: new Set()
+    };
+
+    const els = {
+      appTitle: document.getElementById('appTitle'),
+      overallPercent: document.getElementById('overallPercent'),
+      overallRead: document.getElementById('overallRead'),
+      bookSelect: document.getElementById('bookSelect'),
+      bookTitle: document.getElementById('bookTitle'),
+      bookCount: document.getElementById('bookCount'),
+      bookProgressBar: document.getElementById('bookProgressBar'),
+      chaptersContent: document.getElementById('chaptersContent'),
+      nextReadingBtn: document.getElementById('nextReadingBtn'),
+      nextReadingText: document.getElementById('nextReadingText'),
+      refreshBtn: document.getElementById('refreshBtn'),
+      booksOverview: document.getElementById('booksOverview'),
+      statusToast: document.getElementById('statusToast')
+    };
+
+    function apiConfigured() {
+      return APPS_SCRIPT_URL &&
+        APPS_SCRIPT_URL.startsWith('https://script.google.com/') &&
+        APPS_SCRIPT_URL.includes('/exec');
+    }
+
+    async function apiGet(params = {}) {
+      const url = new URL(APPS_SCRIPT_URL);
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          url.searchParams.set(key, value);
+        }
+      });
+      url.searchParams.set('_', Date.now());
+
+      const response = await fetch(url.toString(), {
+        method: 'GET',
+        redirect: 'follow',
+        cache: 'no-store'
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (!data.ok) throw new Error(data.error || 'Erro ao carregar dados.');
+      return data;
+    }
+
+    async function apiPost(payload = {}) {
+      const body = new URLSearchParams();
+      Object.entries(payload).forEach(([key, value]) => {
+        body.set(key, String(value));
+      });
+
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (!data.ok) throw new Error(data.error || 'Erro ao salvar.');
+      return data;
+    }
+
+    function applyState(data) {
+      state.currentBook = data.currentBook || '';
+      state.chapters = Array.isArray(data.chapters) ? data.chapters : [];
+      state.books = Array.isArray(data.books) ? data.books : [];
+      state.bookProgress = data.bookProgress || { read: 0, total: 0, percent: 0 };
+      state.overall = data.overall || { read: 0, total: 1189, percent: 0 };
+
+      if (data.appTitle) {
+        els.appTitle.textContent = data.appTitle;
+        document.title = data.appTitle;
+      }
+
+      localStorage.setItem('anoBiblico_currentBook', state.currentBook);
+      render();
+    }
+
+    function render() {
+      renderBookSelect();
+      renderStats();
+      renderChapters();
+      renderBooksOverview();
+    }
+
+    function renderBookSelect() {
+      const selected = state.currentBook;
+
+      els.bookSelect.innerHTML = state.books
+        .map(book => {
+          const suffix = book.read ? ` — ${book.read}/${book.chapters}` : '';
+          return `<option value="${escapeHtml(book.name)}" ${book.name === selected ? 'selected' : ''}>
+            ${escapeHtml(book.name)}${suffix}
+          </option>`;
+        })
+        .join('');
+    }
+
+    function renderStats() {
+      els.overallPercent.textContent = `${state.overall.percent || 0}%`;
+      els.overallRead.textContent = `${state.overall.read || 0} / ${state.overall.total || 1189}`;
+
+      els.bookTitle.textContent = state.currentBook || '—';
+      els.bookCount.textContent =
+        `${state.bookProgress.read || 0} de ${state.bookProgress.total || 0}`;
+
+      els.bookProgressBar.style.width = `${state.bookProgress.percent || 0}%`;
+
+      const next = state.chapters.find(item => !item.read);
+      if (next) {
+        els.nextReadingBtn.style.display = 'block';
+        els.nextReadingText.textContent = `${state.currentBook} ${next.chapter}`;
+        els.nextReadingBtn.dataset.chapter = String(next.chapter);
+      } else {
+        els.nextReadingBtn.style.display = 'none';
+        els.nextReadingBtn.dataset.chapter = '';
+      }
+    }
+
+    function renderChapters() {
+      if (!state.chapters.length) {
+        els.chaptersContent.innerHTML = `
+          <div class="empty-state">
+            Nenhum capítulo encontrado para este livro.
+          </div>
+        `;
+        return;
+      }
+
+      const pending = state.chapters.filter(item => !item.read);
+      const done = state.chapters.filter(item => item.read);
+
+      const pendingHtml = pending.length
+        ? `<div class="chapter-grid">${pending.map(chapterButtonHtml).join('')}</div>`
+        : `<div class="empty-state">Livro concluído! Todos os capítulos estão marcados. ✓</div>`;
+
+      const doneHtml = done.length
+        ? `
+          <details class="completed-box">
+            <summary>Concluídos (${done.length})</summary>
+            <div class="chapter-grid">
+              ${done.map(chapterButtonHtml).join('')}
+            </div>
+          </details>
+        `
+        : '';
+
+      els.chaptersContent.innerHTML = `
+        <div class="section-head">
+          <h3>A ler</h3>
+          <small>${pending.length} pendente${pending.length === 1 ? '' : 's'}</small>
+        </div>
+        ${pendingHtml}
+        ${doneHtml}
+      `;
+
+      els.chaptersContent.querySelectorAll('.chapter').forEach(button => {
+        button.addEventListener('click', () => {
+          const chapter = Number(button.dataset.chapter);
+          const read = button.dataset.read === 'true';
+          toggleChapter(chapter, !read);
+        });
+      });
+    }
+
+    function chapterButtonHtml(item) {
+      const syncing = state.busy.has(item.chapter);
+      const classes = [
+        'chapter',
+        item.read ? 'done' : 'pending',
+        syncing ? 'syncing' : ''
+      ].join(' ');
+
+      return `
+        <button
+          class="${classes}"
+          id="chapter-${item.chapter}"
+          data-chapter="${item.chapter}"
+          data-read="${item.read}"
+          aria-pressed="${item.read}"
+          aria-label="${state.currentBook} capítulo ${item.chapter}${item.read ? ', concluído' : ', pendente'}"
+        >
+          <span class="chapter-number">${item.chapter}</span>
+          <span class="chapter-label">capítulo</span>
+        </button>
+      `;
+    }
+
+    function renderBooksOverview() {
+      els.booksOverview.innerHTML = state.books.map(book => `
+        <div class="book-row" data-book="${escapeHtml(book.name)}">
+          <div>
+            <strong>${escapeHtml(book.name)}</strong>
+            <small>${book.read} de ${book.chapters} capítulos</small>
+          </div>
+          <div class="book-percent">${book.percent}%</div>
+        </div>
+      `).join('');
+
+      els.booksOverview.querySelectorAll('.book-row').forEach(row => {
+        row.addEventListener('click', () => {
+          chooseBook(row.dataset.book);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    }
+
+    async function loadApp(showMessage = false) {
+      if (!apiConfigured()) {
+        showSetupMessage();
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const preferredBook = localStorage.getItem('anoBiblico_currentBook') || '';
+        const data = await apiGet({
+          action: 'init',
+          book: preferredBook
+        });
+        applyState(data);
+
+        if (showMessage) toast('Leitura atualizada.');
+      } catch (error) {
+        showError(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function chooseBook(book) {
+      if (!book || book === state.currentBook) return;
+
+      const previousBook = state.currentBook;
+
+      try {
+        els.bookSelect.disabled = true;
+        toast(`Abrindo ${book}...`);
+
+        const data = await apiPost({
+          action: 'setCurrentBook',
+          book
+        });
+
+        applyState(data);
+        toast(`${book} definido como livro atual.`);
+      } catch (error) {
+        els.bookSelect.value = previousBook;
+        showError(error);
+      } finally {
+        els.bookSelect.disabled = false;
+      }
+    }
+
+    async function toggleChapter(chapter, read) {
+      if (state.busy.has(chapter)) return;
+
+      const item = state.chapters.find(ch => ch.chapter === chapter);
+      if (!item) return;
+
+      const oldValue = item.read;
+      state.busy.add(chapter);
+
+      // Atualização visual imediata.
+      item.read = read;
+      recalcLocalProgress();
+      render();
+
+      try {
+        const data = await apiPost({
+          action: 'toggleChapter',
+          book: state.currentBook,
+          chapter,
+          read
+        });
+
+        applyState(data);
+        toast(read
+          ? `${state.currentBook} ${chapter} concluído.`
+          : `${state.currentBook} ${chapter} voltou para pendentes.`
+        );
+      } catch (error) {
+        item.read = oldValue;
+        recalcLocalProgress();
+        render();
+        showError(error);
+      } finally {
+        state.busy.delete(chapter);
+        render();
+      }
+    }
+
+    function recalcLocalProgress() {
+      const read = state.chapters.filter(ch => ch.read).length;
+      const total = state.chapters.length;
+      const delta = read - (state.bookProgress.read || 0);
+
+      state.bookProgress = {
+        read,
+        total,
+        percent: total ? Math.round((read / total) * 100) : 0
+      };
+
+      state.overall = {
+        ...state.overall,
+        read: Math.max(0, (state.overall.read || 0) + delta)
+      };
+
+      state.overall.percent = state.overall.total
+        ? Math.round((state.overall.read / state.overall.total) * 100)
+        : 0;
+
+      const book = state.books.find(b => b.name === state.currentBook);
+      if (book) {
+        book.read = read;
+        book.percent = state.bookProgress.percent;
+      }
+    }
+
+    function setLoading(isLoading) {
+      els.refreshBtn.disabled = isLoading;
+      els.refreshBtn.textContent = isLoading ? '…' : '↻';
+    }
+
+    function toast(message, isError = false) {
+      els.statusToast.textContent = message;
+      els.statusToast.classList.toggle('error', isError);
+      els.statusToast.classList.add('show');
+
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        els.statusToast.classList.remove('show');
+      }, 2200);
+    }
+
+    function showError(error) {
+      console.error(error);
+      toast(error?.message || 'Não foi possível concluir a ação.', true);
+    }
+
+    function showSetupMessage() {
+      els.bookSelect.innerHTML = '<option>Configuração necessária</option>';
+      els.bookTitle.textContent = 'Conecte o Apps Script';
+      els.bookCount.textContent = '';
+
+      els.chaptersContent.innerHTML = `
+        <div class="empty-state">
+          <strong>Falta apenas conectar o site à sua planilha.</strong><br><br>
+          Abra este arquivo <code>index.html</code> e procure por
+          <code>APPS_SCRIPT_URL</code>.<br><br>
+          Cole ali a URL da implantação do Apps Script que termina em
+          <code>/exec</code>.
+        </div>
+      `;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    els.bookSelect.addEventListener('change', event => {
+      chooseBook(event.target.value);
+    });
+
+    els.refreshBtn.addEventListener('click', () => {
+      loadApp(true);
+    });
+
+    els.nextReadingBtn.addEventListener('click', () => {
+      const chapter = els.nextReadingBtn.dataset.chapter;
+      const target = document.getElementById(`chapter-${chapter}`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.focus({ preventScroll: true });
+      }
+    });
+
+    loadApp();
+  </script>
+</body>
+</html>
